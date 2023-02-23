@@ -1,0 +1,28 @@
+.content-user-page{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.content-user-page h1{
+    margin: .5em;
+}
+.ul-content-user-page{
+    list-style: none;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.ul-content-user-page li {
+    margin: 1em 0px;
+    border: 1px solid black;
+    text-align: center;
+    padding: 0.5em;
+    border-radius: 10px;
+    box-shadow: .4em .4em 5px rgb(127, 127, 127, 8);
+
+}
+.ul-content-user-page li p {
+    margin: .5em;
+}

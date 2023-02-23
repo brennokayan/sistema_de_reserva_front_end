@@ -1,0 +1,63 @@
+.content{
+    height: 100vh;
+    width: 100vw;
+    background-color: #1d1d1d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.card{
+    background-color: rgba(255, 255, 255,.2);
+    height: 90%;
+    width: 70%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 2em;
+    flex-direction: column;
+    box-shadow: 1.5em 1.5em 2em rgba(0, 0, 0,.8);
+    border-top:  1px solid rgba(255, 255, 255, 1);
+    border-left:  1px solid rgba(255, 255, 255, 1);
+    
+}
+.card h1{
+    color: whitesmoke;
+    font: 2em sans-serif;
+    margin-left: 0em;
+    margin-bottom: 2em;
+}
+.card form{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+.card form input{
+    border: none;
+    outline: none;
+
+}
+.card form input[type="button"]{
+    height: 3.5em;
+    width: 10em;
+    margin-left: 2em;
+    margin-top: 1em;
+    border-radius: 1em;
+}
+.card-iten{
+    padding: 5px;
+    display: flex;
+    background-color: transparent;
+    align-items: center;
+}
+.card-iten input {
+    margin-left: 10px;
+    border-radius: 10px;
+    height: 2.5em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
