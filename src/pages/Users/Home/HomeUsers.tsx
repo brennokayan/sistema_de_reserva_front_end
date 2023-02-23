@@ -10,22 +10,31 @@ import 'moment-timezone';
 import './styles.css';
 
 type RepositoryUser = {
-    UserReserva: {
-        0: 
-           [ 
-            userID: string,
-            data_inicio: string,
-            data_fim: string,
-            item_da_reserva: string,
-            id: string
-        ]
-        
-    }
+    UserReserva: Array<
+    {
+      userID: string,
+      data_inicio: string,
+      data_fim: string,
+      item_da_reserva: string,
+      id: string
+      
+  }
+    >
     GetUniqueUser:{
+        id: string
         name: string
         email: string
     }
 
+}
+interface Data {
+  UserReserva: Array<[
+    userID: string,
+    data_incio: string,
+    data_fim: string,
+    item_da_reserva: string,
+    id: string
+  ]>
 }
 
 
@@ -34,7 +43,8 @@ function HomeUsers() {
     const [data, set_data] = useState<RepositoryUser[] >([])
 
     const  params  = useParams(); 
-    const id = params.id
+    const id: any = params.id
+
     const handleLogout =  () => {
         logout()
         handleSingIn()
@@ -47,33 +57,35 @@ function HomeUsers() {
         await GetUniqueUser(id)
         .then(res => {set_data([res.data])})
     }
+    var newlocal = ''
 
-    function apresentar(){
-        a = data.flatMap(e => e.UserReserva).length
-        if(a == 0) return <h1>não possui</h1>
+    function apresentar() {
+        a = data.flatMap((e) => e.UserReserva).length;
+        if (a == 0) return <h1>não possui</h1>;
         else {
-            const options = [];
-        for (let i = a -1; i >= 0; i--) {
-            options.push( data.map(e => 
-            <ul className='ul-content-user-page'>
-                {
-                    data.map(e =>
-                        <li key={e.UserReserva[i].userID}>
-                            <p>Protocolo de reserva: <br/>{e.UserReserva[i].id}</p>
-                            <p>email: {e.UserReserva[i].userEmail}</p>
-                            <p>Item Reservado: <br/>{e.UserReserva[i].item_da_reserva}</p>
-                            <p>Data Inicial: {e.UserReserva[i].data_inicio}</p>
-                            <p>Data Final: {e.UserReserva[i].data_fim}</p>
-                            <Button variant='contained' color='error' onClick={() => Excluir(e.UserReserva[i].id)} >Deletar</Button>
-                        </li>
-                    )
-                }
-            </ul>
-            ));
+          const options = [];
+          for (let i = a - 1; i >= 0; i--) {
+            options.push(
+              <ul className="ul-content-user-page" key={`reserva-${i}`}>
+                {data.map((e) => (
+                  <li key={`reserva-${i}-${e.UserReserva[i].id}`}>
+                    <p>Protocolo de reserva: <br />{e.UserReserva[i].id}</p>
+                    <p>email: {e.GetUniqueUser.email}</p>
+                    <p>Item Reservado: <br />{e.UserReserva[i].item_da_reserva}</p>
+                    <p>Data Inicial: {e.UserReserva[i].data_inicio}</p>
+                    <p>Data Final: {(e.UserReserva[i]).data_fim}</p>
+                    <Button variant="contained" color="error" onClick={() => Excluir(e.UserReserva[i].id)}>
+                      Deletar
+                    </Button>
+                  </li>
+                ))}
+              </ul>
+            );
+          }
+          return options;
         }
-        return options
-        }
-    }
+      }
+      
 
     async function Excluir(idReserva: string){
         await DelReserva(idReserva)

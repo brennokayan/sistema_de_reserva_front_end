@@ -20,7 +20,7 @@ type repositoryEquipments = {
   name: string,
 }
 
-export default function ModalCreateReservaUser({email}): JSX.Element {
+export default function ModalCreateReservaUser({email}:any) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => {setOpen(false), window.location.reload()};
@@ -30,7 +30,6 @@ export default function ModalCreateReservaUser({email}): JSX.Element {
   const [item_da_reserva, set_item_da_reserva] = useState<string | null>(null)
   const [equipment, set_equipment] = useState<repositoryEquipments[]>([])
   
-
 
   async function Equipments() {
     await GetEquipamentos()
@@ -46,8 +45,7 @@ export default function ModalCreateReservaUser({email}): JSX.Element {
     await CadReserva(data)
   }
   var Equipamentos = equipment.map(e => (e.name))
-  var Equipamentos_split = item_da_reserva?.split()
-  var Equipamentos_reduce = Equipamentos_split?.reduce(function (texto) { return texto })
+  var Equipamentos_reduce = [item_da_reserva].reduce(function (texto) { return texto })
   useEffect(() => {
 
     Equipments()

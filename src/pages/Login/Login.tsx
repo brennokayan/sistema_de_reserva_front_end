@@ -109,7 +109,7 @@ useEffect(() => {
           </div>
           <Button 
             variant="contained" 
-            color={error} 
+            color={"info"} 
             style={{ margin: '1em 0px' }} 
             onClick={() => {handleLogin(email, password)}}
             disabled={!email || !password}

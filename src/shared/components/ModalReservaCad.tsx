@@ -42,9 +42,8 @@ export default function ModalReservaCad() {
   var Usuarios_reduce = Usuarios_split?.reduce(function(texto){return texto})
   console.log(Usuarios_reduce)
   var Equipamentos = equipment.map(e => (e.name))
-  var Equipamentos_split = item_da_reserva?.split()
-  var Equipamentos_reduce = Equipamentos_split?.reduce(function(texto){return texto})
-  
+  var Equipamentos_reduce = [item_da_reserva].reduce(function(texto){return texto})
+  console.log(Equipamentos_reduce)
 
   
   async function NewReserva(){

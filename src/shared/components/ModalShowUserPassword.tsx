@@ -19,7 +19,7 @@ type RepositoryAdmin = {
 
 
 
-export default function ModalShowUserPassword({id}) {
+export default function ModalShowUserPassword({id}: any) {
   const [passwordAdmin, set_passwordAdmin] = useState<RepositoryAdmin[]>([])
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
