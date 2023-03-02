@@ -5,7 +5,7 @@ import {User, Key, IdentificationCard, Target} from "phosphor-react"
 import { Button } from '@mui/material'
 import { login } from '../../shared/utils/Auth'
 import { useNavigate } from 'react-router-dom'
-import { GetPasswordAdmin, GetUsers } from '../../shared/services/api'
+import { GetPasswordAdmin, GetUsers, GetUserSecretaria } from '../../shared/services/api'
 import EncryptedPassword from '../../shared/components/EncryptPassword'
 import sleep from '../../shared/components/Sleep'
 
@@ -17,6 +17,10 @@ type RepositoryUsers ={
 }
 
 type RepositoryAdmin = {
+  password: string
+}
+type RepositoryUsersSecretaria = {
+  email: string
   password: string
 }
 
@@ -32,12 +36,19 @@ function Login() {
   const [error, set_Error] = useState<string>("info")
   const [users, set_Users] = useState<RepositoryUsers[]>([])
   const [admin, set_admin] = useState<RepositoryAdmin[]>([])
+  const [secretaria, set_secretaria] = useState<RepositoryUsersSecretaria[]>([])
 
   async function handleLogin(email: string | null, password: string | null) {
     if(email === "admin@admin.com" && password === admin[0].password){
       login("abc123")
       navigation('/admin') 
-    }    
+    }
+      for(let i = 0; i < secretaria.length; i++){
+        if(email === secretaria[i].email && password === secretaria[i].password){
+          login("abc123")
+          navigation('/secretaria') 
+        }   
+      } 
       for(var i = 0; i < users.length; i++){
         if(email === users[i].email && password === users[i].password){
           login("abc123")
@@ -62,6 +73,14 @@ function Login() {
         })
 }
 
+async function Secretaria(){
+  await GetUserSecretaria()
+        .then(res => {
+          res.data;
+          set_secretaria(res.data);
+        })
+}
+
 async function Admin() {
   await GetPasswordAdmin()
       .then(res => {
@@ -73,6 +92,7 @@ async function Admin() {
 
 useEffect(() => {
   Admin();
+  Secretaria()
   Users();
 }, [])
 

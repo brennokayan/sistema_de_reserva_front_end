@@ -22,7 +22,7 @@ const style = {
   p: 4,
 };
 
-export default function CreateAdminPassword() {
+export default function CreateAdminPassword({disabled = false}) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -39,7 +39,7 @@ export default function CreateAdminPassword() {
   return (
     <div>
       <Button 
-        style={{margin:'0.5em'}} 
+        style={{margin:'0.5em', visibility: disabled? 'hidden': 'visible'}} 
         variant='contained' 
         onClick={handleOpen}
       >

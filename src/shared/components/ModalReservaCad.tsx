@@ -15,6 +15,7 @@ import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 type repositoryUsers = {
   id: string,
   email: string,
+  name: string,
 }
 type repositoryEquipments = {
   id: string,
@@ -35,15 +36,23 @@ export default function ModalReservaCad() {
   const [data_inicio, set_data_inicio] = useState<Date | null>(null)
   const [data_fim, set_data_fim] = useState<Date | null>(null)
   const [item_da_reserva, set_item_da_reserva] = useState<string | null>(null)
+  const [nameUser, set_nameUser] = useState<string | null>(null)
 
 
   var Usuarios = get_Users.map(e => (e.id + " - " + e.email))
-  var Usuarios_split = userid?.split(' - ')
+  var Usuarios_split= userid?.split(' - ')
   var Usuarios_reduce = Usuarios_split?.reduce(function(texto){return texto})
-  console.log(Usuarios_reduce)
+
+
+  var NomeUsuario = get_Users.map(e => (e.name + " - " + e.email))
+  var NomeUsuario_split= nameUser?.split(' - ')
+  var NomeUsuario_reduce = NomeUsuario_split?.reduce(function(texto){return texto})
+  
+  console.log(NomeUsuario_reduce, Usuarios_reduce)
+  
   var Equipamentos = equipment.map(e => (e.name))
   var Equipamentos_reduce = [item_da_reserva].reduce(function(texto){return texto})
-  console.log(Equipamentos_reduce)
+
 
   
   async function NewReserva(){
@@ -51,7 +60,8 @@ export default function ModalReservaCad() {
       data_inicio: data_inicio,
       data_fim: data_fim,
       userID: Usuarios_reduce,
-      item_da_reserva: Equipamentos_reduce
+      item_da_reserva: Equipamentos_reduce,
+      nameUser: NomeUsuario_reduce
     }
     await CadReserva(data)
   }
@@ -95,13 +105,13 @@ export default function ModalReservaCad() {
             aria-describedby="modal-modal-description"
         >
         <Box sx={{
-        top: '20%', 
+        top: '10%', 
         left: '5vw', 
         display: 'flex', 
         flexDirection: "column", 
         alignItems: 'center', 
         justifyContent:'center',
-        height: 400, 
+        height: '80%', 
         width: '90vw', 
         position: 'absolute', 
         background: 'white'}}>
@@ -125,11 +135,6 @@ export default function ModalReservaCad() {
                       inputFormat = 'DD-MM-YYYY HH:mm:ss'
                       ampm = {false}
                     />
-                    {/* <TextField 
-                      placeholder='email do usuário' 
-                      onChange={(e) => {set_userid(e.target.value)}} 
-                    /> */}
-
                     <Autocomplete
                         options={Usuarios}
                         sx={{width: '60vw'}}
@@ -140,12 +145,33 @@ export default function ModalReservaCad() {
                                 {...e}
                                 onChange={e => set_userid(e.target.value)}
                                 className="TextField"
-                                label="E-mail do Usuário" 
+                                label="Email do Usuário" 
                                 variant="outlined"
                                 color={"info"} 
                                 id="busca" 
                                 InputLabelProps={{className: "TextField"}}
                                 value={userid} 
+                            />
+                        }
+                    
+                    />
+
+                    <Autocomplete
+                        options={NomeUsuario}
+                        sx={{width: '60vw'}}
+                        freeSolo
+                        onChange={((e: any, newValue: string |null) => {set_nameUser(newValue)})}
+                        renderInput={(e) => 
+                            <TextField
+                                {...e}
+                                onChange={e => set_nameUser(e.target.value)}
+                                className="TextField"
+                                label="Nome do Usuário" 
+                                variant="outlined"
+                                color={"info"} 
+                                id="busca" 
+                                InputLabelProps={{className: "TextField"}}
+                                value={nameUser} 
                             />
                         }
                     

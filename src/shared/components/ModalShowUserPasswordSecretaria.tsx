@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { TextField } from '@mui/material';
-import { CadUsers, GetUsers, GetPassword, GetPasswordAdmin } from '../services/api';
+import { CadUsers, GetUsers, GetPassword, GetPasswordAdmin, GetPasswordUserSecretaria } from '../services/api';
 import { Eye } from 'phosphor-react';
 import EncryptedPassword from './EncryptPassword';
 
@@ -12,6 +12,7 @@ import EncryptedPassword from './EncryptPassword';
 type RepositoryPassword = {
     name: string;
     password: string;
+    id: string;
 }
 type RepositoryAdmin = {
   password: string;
@@ -20,11 +21,11 @@ type RepositoryAdmin = {
 
 
 
-export default function ModalShowUserPassword({id}: any) {
+export default function ModalShowUserPasswordSecretaria({id}: any) {
   const [passwordAdmin, set_passwordAdmin] = useState<RepositoryAdmin[]>([])
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {setOpen(false), window.location.reload()};
 
   const [passwordAuth, set_passwordAuth] = useState<string>("")
   const [password_user,set_password_user] = useState<RepositoryPassword[]>([])
@@ -38,7 +39,7 @@ export default function ModalShowUserPassword({id}: any) {
   }
   
   async function GetUserPassword(id: any){
-      await GetPassword(id)
+      await GetPasswordUserSecretaria(id)
       .then(res => {
         set_password_user([res.data]);
         })
@@ -53,14 +54,15 @@ export default function ModalShowUserPassword({id}: any) {
             setOpen(false)
         }
     }
-
+    console.log(id)
     useEffect(() => {
       Password_Admin();
     }, [])
+    console.log(passwordAdmin.map(e => e.password))
 
   return (
     <div>
-      <Button variant='contained' color='warning'  style={{marginTop:'1em'}} onClick={handleOpen}><Eye size={24} style={{marginRight:'0.3em'}}/>mostrar a senha</Button>
+      <Button variant='contained' color='warning'  style={{marginTop:'1em'}} onClick={handleOpen} disabled={false}><Eye size={24} style={{marginRight:'0.3em'}}/>mostrar a senha</Button>
       <Modal
         open={open}
         onClose={handleClose}

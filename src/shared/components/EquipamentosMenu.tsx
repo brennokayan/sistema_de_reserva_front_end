@@ -11,7 +11,7 @@ type RepositoryEquipamentos = {
     type: string;
 }
 
-export default function Equipamentos_Menu(){
+export default function Equipamentos_Menu({disabled = false}) {
     const [equipaments, set_equipaments] = useState<RepositoryEquipamentos[]>([])
     async function Equipaments(){
         await GetEquipamentos()
@@ -43,7 +43,7 @@ export default function Equipamentos_Menu(){
                                 <Button 
                                     variant="contained" 
                                     color="error" 
-                                    style={{ margin: '1em 0px' }} 
+                                    style={{ margin: '1em 0px',  visibility: disabled? 'hidden': 'visible' }}
                                     onClick={() => Excluir(e.name)}
                                 >
                                     <MinusCircle 

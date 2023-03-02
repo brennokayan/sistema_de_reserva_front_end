@@ -1,16 +1,17 @@
 import { Button } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import Equipamentos_Menu from "../../shared/components/EquipamentosMenu";
-import { Users_Menu } from "../../shared/components/UsersMenu";
-import { logout } from "../../shared/utils/Auth";
-import Equipamento from "../Equipamentos/Equipamento";
-import Reserva from "../Reserva/Reserva";
-import Usuario from "../Usuarios/Usuario";
-import "./style_admin.css"
-import { useNavigate } from 'react-router-dom'
-import ReservaRealizada from "../ReservasRealizadas/ReservasRealizadas";
 
-export function Admin() {
+
+import "../../admin/style_admin.css"
+import { useNavigate } from 'react-router-dom'
+import { logout } from "../../../shared/utils/Auth";
+import Equipamento from "../../Equipamentos/Equipamento";
+import Reserva from "../../Reserva/Reserva";
+import ReservaRealizada from "../../ReservasRealizadas/ReservasRealizadas";
+import Usuario from "../../Usuarios/Usuario";
+
+
+export function ControleSecretaria() {
 
 
     const handleLogout =  () => {
@@ -23,13 +24,13 @@ export function Admin() {
 
     function MenuTrade(){
         if(user_or_equip == 0){
-            return<Usuario />
+            return<Usuario disabled={true} />
         }
         if(user_or_equip == 1){
-            return<Equipamento disabled={false} /> 
+            return<Equipamento disabled={true} /> 
         }
         if(user_or_equip == 2){
-            return<Reserva disabled={false} />
+            return<Reserva disabled={true} />
         }
         if(user_or_equip == 3){
             return <ReservaRealizada/>

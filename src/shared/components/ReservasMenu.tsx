@@ -4,16 +4,18 @@ import { DelReserva,GetReserva } from "../services/api";
 import { Button } from "@mui/material";
 import { MinusCircle } from "phosphor-react";
 import ModalReservaCad from "./ModalReservaCad";
+import { HmacSHA224 } from "crypto-js";
 
 type RepositoryEquipamentos = {
     id: string;
     data_inicio: Date;
     data_fim: Date;
-    userEmail: string;
+    userID: string;
     item_da_reserva: string;
+    nameUser: string;
 }
 
-export default function Reserva_Menu(){
+export default function Reserva_Menu({disabled = false}){
     const [reserva, set_reserva] = useState<RepositoryEquipamentos[]>([])
     async function Reservas(){
         await GetReserva()
@@ -30,7 +32,7 @@ export default function Reserva_Menu(){
         Reservas();
     }, [])
 
-
+  
 
     return(
         <div className="content-admin">
@@ -39,15 +41,16 @@ export default function Reserva_Menu(){
                 {
                     reserva.map(e => 
                             <li>
-                                <h3>id da reserva: {e.id}</h3>
-                                <h5>user id: {e.userEmail}</h5>
-                                <p>id da item da reserva: {e.item_da_reserva}</p>
+                                <h2>Item da reserva: {e.item_da_reserva}</h2>
+                                <h3>reservado por: {e.nameUser}</h3>
+                                <p>Protocolo: {e.id}</p>
                                 <>data inicio:{e.data_inicio}</>
+                                <br />
                                 <>data fim: {e.data_fim}</>
                                 <Button 
                                     variant="contained" 
                                     color="error" 
-                                    style={{ margin: '1em 0px' }} 
+                                    style={{ margin: '1em 0px', visibility: disabled?'hidden': 'visible' }} 
                                     onClick={() => Excluir(e.id)}
                                 >
                                     <MinusCircle 

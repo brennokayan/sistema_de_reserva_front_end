@@ -1,56 +1,53 @@
 import React, { useEffect, useState } from "react";
-import { DelUsers, GetUsers } from "../../shared/services/api";
+import { DelUsers, GetUsers, GetUserSecretaria } from "../../shared/services/api";
 import ModalUserCad from "../../shared/components/ModalUserCad";
 
-import "../components/admin.css"
+
 import ModalShowUserPassword from "../../shared/components/ModalShowUserPassword";
 import { Button } from "@mui/material";
 import { MinusCircle } from "phosphor-react";
 import  CreateAdminPassword  from "../../shared/components/CreateAdminPassword";
+import ModalUserSecretariaCad from "../../shared/components/ModalUserSecretariaCad";
+import ModalShowUserPasswordSecretaria from "../../shared/components/ModalShowUserPasswordSecretaria";
 
-type repositoryUsers = {
+type repositoryUsersSecretaria = {
     id: string;
     name: string;
     email: string;
     password: string;
 }
+export default function Secretaria({disabled = false}){
+    const [get_Users_Secretaira, set_Users_Secretaria] = useState<repositoryUsersSecretaria[]>([])
 
-
-
-
-
-export function Users_Menu({disabled = false}) {
-    const [get_Users, set_Users] = useState<repositoryUsers[]>([])
-
-    async function Users() {
-        await GetUsers()
+    async function UsersSecretaria() {
+        await GetUserSecretaria()
             .then(res => {
                 res.data;
-                set_Users(res.data);
+                set_Users_Secretaria(res.data);
             })
     }
 
     async function Excluir(id: string) {
         await DelUsers(id)
-            .then(() => Users())
+            .then(() => UsersSecretaria())
     }
 
     useEffect(() => {
-        Users();
+        UsersSecretaria();
     }, [])
 
     return (
         <>
             <div className="content-admin">
-                <ModalUserCad />
+                <ModalUserSecretariaCad />
                 <ul>
                     {
-                        get_Users.map(e =>
+                        get_Users_Secretaira.map(e =>
                             <li>
                                 <h3>Usuário: {e.name}</h3>
                                 <p>email: {e.email}</p>
                                 <p>id: {e.id}</p>
-                                <ModalShowUserPassword id={e.id} />
+                                <ModalShowUserPasswordSecretaria id={e.id} />
                                 <Button 
                                     variant="contained" 
                                     color="error" 
@@ -68,8 +65,8 @@ export function Users_Menu({disabled = false}) {
                     }
                 </ul>
 
+
             </div>
         </>
     );
 }
-
