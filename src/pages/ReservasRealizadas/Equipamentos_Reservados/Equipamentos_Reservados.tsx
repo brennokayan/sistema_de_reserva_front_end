@@ -20,10 +20,6 @@ export default function Equipamentos_Reservados() {
     const [equipaments, set_equipaments] = useState<RepositoryEquipamentos[]>([])
     const [itens_da_reserva, set_itens_da_reserva] = useState<Itens_da_Reserva[]>([])
 
-    for (let i = 0; i < equipaments.length; i++) {
-        console.log(equipaments[i].name, " - ", itens_da_reserva.length)
-    }
-
 
     async function Equipaments() {
         await GetEquipamentos()
@@ -35,20 +31,20 @@ export default function Equipamentos_Reservados() {
     async function EquipamentsReservados(item: string) {
         await GetItensReservados(item)
             .then(res => {
-                set_itens_da_reserva(res.data)
-            })
 
-    }
+                set_itens_da_reserva(res.data)
+
+            })
+            
+        }
+
+
     function hasReservations(itemName: string) {
         const reservations = itens_da_reserva.filter(
             (reservation) => reservation.item_da_reserva === itemName
         );
         return reservations.length > 0;
     }
-
-
-
-    // 
 
     useEffect(() => {
         Equipaments();
@@ -83,7 +79,7 @@ export default function Equipamentos_Reservados() {
                         <Button
                             id={e.name}
                             onClick={() => {
-                                EquipamentsReservados(e.name);
+                                EquipamentsReservados(e.name)
                             }}
                             style={{
                                 margin: "1em",

@@ -110,10 +110,11 @@ function HomeUsers() {
             </Button>
             Bem vindo: {data.map(e => e.GetUniqueUser.name.toUpperCase())}
         </h1>
-        <ModalCreateReservaUser email={String(data.map(e => e.GetUniqueUser.id))} />
+        <ModalCreateReservaUser email={String(data.map(e => e.GetUniqueUser.id))} name={"brenno"} />
         {
             apresentar()
         }
+
         
 
       </div>

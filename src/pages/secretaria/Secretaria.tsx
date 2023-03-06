@@ -1,12 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { DelUsers, GetUsers, GetUserSecretaria } from "../../shared/services/api";
-import ModalUserCad from "../../shared/components/ModalUserCad";
-
-
-import ModalShowUserPassword from "../../shared/components/ModalShowUserPassword";
+import { DelUserSecretaria, GetUserSecretaria } from "../../shared/services/api";
 import { Button } from "@mui/material";
 import { MinusCircle } from "phosphor-react";
-import  CreateAdminPassword  from "../../shared/components/CreateAdminPassword";
 import ModalUserSecretariaCad from "../../shared/components/ModalUserSecretariaCad";
 import ModalShowUserPasswordSecretaria from "../../shared/components/ModalShowUserPasswordSecretaria";
 
@@ -28,7 +23,7 @@ export default function Secretaria({disabled = false}){
     }
 
     async function Excluir(id: string) {
-        await DelUsers(id)
+        await DelUserSecretaria(id)
             .then(() => UsersSecretaria())
     }
 

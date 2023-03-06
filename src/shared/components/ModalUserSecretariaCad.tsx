@@ -37,6 +37,10 @@ export default function ModalUserSecretariaCad() {
           password: password
       }
       await CadUserSecretaria(data)
+      .then(res => {if(res.status == 201){
+        alert("Usuário da secretaria cadastrado com sucesso!")
+        handleClose()
+      }})
 
   }
   function EncryptedPassword(data: any){

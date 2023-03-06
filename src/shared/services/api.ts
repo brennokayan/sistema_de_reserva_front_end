@@ -51,7 +51,7 @@ export async function GetItensReservados(itens_da_reserva: string){
 }
 
 export async function GetDataReservadas(data_fim: any){
-    const res = await api.get(`datas_reservas/q=${data_fim}`)
+    const res = await api.get(`/datas_reservas/q=${data_fim}`)
     return res;
 }
 
@@ -85,5 +85,9 @@ export async function GetUserSecretaria(){
 }
 export async function GetPasswordUserSecretaria(id: string){
     const res = await api.get(`/read_secretaria_user/${id}`)
+    return res;
+}
+export async function DelUserSecretaria(id: string){
+    const res = await api.delete(`/delete_secretaria_user/${id}`);
     return res;
 }

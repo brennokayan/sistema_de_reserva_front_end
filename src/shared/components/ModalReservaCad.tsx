@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { Autocomplete, TextField } from '@mui/material';
-import { CadReserva, CadUsers, GetEquipamentos, GetUsers } from '../services/api';
-import { IdentificationCard, PlusCircle } from 'phosphor-react';
+import { CadReserva, GetEquipamentos, GetUsers } from '../services/api';
+import { PlusCircle } from 'phosphor-react';
 
 import Stack from '@mui/material/Stack';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import { ToUtc } from '../utils/ToUTC';
+
+import "dayjs/locale/pt-br";
+import dayjs from 'dayjs';
 
 type repositoryUsers = {
   id: string,
@@ -53,17 +56,21 @@ export default function ModalReservaCad() {
   var Equipamentos = equipment.map(e => (e.name))
   var Equipamentos_reduce = [item_da_reserva].reduce(function(texto){return texto})
 
-
+  dayjs.locale("pt-br")
   
   async function NewReserva(){
     const data = {
-      data_inicio: data_inicio,
-      data_fim: data_fim,
+      data_inicio: ToUtc(data_inicio),
+      data_fim: ToUtc(data_fim),
       userID: Usuarios_reduce,
       item_da_reserva: Equipamentos_reduce,
       nameUser: NomeUsuario_reduce
     }
     await CadReserva(data)
+    .then(res => {if(res.status == 201){
+      alert("Reserva feita com sucesso!")
+      handleClose()
+    }})
   }
 
   

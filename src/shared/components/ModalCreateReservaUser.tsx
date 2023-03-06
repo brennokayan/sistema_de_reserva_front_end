@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { Autocomplete, Stack, TextField } from '@mui/material';
-import { CadEquipamentos, CadReserva, GetEquipamentos } from '../services/api';
-import { Eye, PlusCircle } from 'phosphor-react';
+import { CadReserva, GetDataReservadas, GetEquipamentos } from '../services/api';
+import { PlusCircle } from 'phosphor-react';
 import { DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import moment from 'moment';
-import 'moment-timezone';
+import { ToUtc } from '../utils/ToUTC';
+import "dayjs/locale/pt-br";
+import dayjs from 'dayjs';
+
+
+
+
 
 
 
@@ -19,36 +23,93 @@ type repositoryEquipments = {
   id: string,
   name: string,
 }
+type RepositoryEquipamentReserved ={
+  data_inicio: string,
+  data_fim: string,
+  item_da_reserva: string,
+  id: string
+}
 
-export default function ModalCreateReservaUser({email}:any) {
+export default function ModalCreateReservaUser({name, email}:any) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => {setOpen(false), window.location.reload()};
-  const [userid, set_userid] = useState<string | null>(null)
-  const [data_inicio, set_data_inicio] = useState<Date | null>(null)
+  const [equipamentReserved, set_equipamentReserved] = useState<RepositoryEquipamentReserved[]>([])
+  const [data_inicio, set_data_inicio] = useState<Date|null>(null)
   const [data_fim, set_data_fim] = useState<Date | null>(null)
   const [item_da_reserva, set_item_da_reserva] = useState<string | null>(null)
   const [equipment, set_equipment] = useState<repositoryEquipments[]>([])
-  
+  const [itens, set_itens] = useState<Object[]>([])
+  const semanaPosterior = new Date();
+  semanaPosterior.setDate(semanaPosterior.getDate() + 7)
+  const semanaAnterior = new Date();
+  semanaAnterior.setDate(semanaAnterior.getDate() - 7)
+
+  var Equipamentos = equipment.map(e => (e.name))
+  var EquipamentosCopy = Equipamentos
+  var Equipamentos_reduce = [item_da_reserva].reduce(function (texto) { return texto })
+
+  dayjs.locale("pt-br")
 
   async function Equipments() {
     await GetEquipamentos()
     .then(res => { set_equipment(res.data); })
   }
+
+  async function EquipamentsReserved(data_inicio: any){
+    await GetDataReservadas(data_inicio)
+    .then(res => {set_equipamentReserved(res.data)})
+
+  }
+
   async function NewReserva() {
     const data = {
-      data_inicio: data_inicio,
-      data_fim: data_fim,
+      data_inicio: ToUtc(data_inicio),
+      data_fim: ToUtc(data_fim),
       userID: email,
+      nameUser: name,
       item_da_reserva: Equipamentos_reduce
     }
     await CadReserva(data)
+    .then(res => {if(res.status == 201){
+      alert("Reserva feita com sucesso!")
+      handleClose()
+    }})
   }
-  var Equipamentos = equipment.map(e => (e.name))
-  var Equipamentos_reduce = [item_da_reserva].reduce(function (texto) { return texto })
-  useEffect(() => {
 
+  function OptionsEquipamentos(){
+    EquipamentsReserved(ToUtc(data_inicio))
+    OptionsEquipamentos()
+    if(equipamentReserved.length == 0){
+      console.log("não ha equipamentos reservados")
+      set_itens(Equipamentos)
+    }
+    for (var i = 0 ; i < equipamentReserved.length; i++) {
+      for(var j = 0; j < Equipamentos.length; j++) {
+        if(equipamentReserved[i].item_da_reserva == Equipamentos[j]){
+          SpliceEquipamentos(j)
+          set_itens(EquipamentosCopy)
+        }
+      }
+    }
+  }
+  function SpliceEquipamentos(position: number){
+    EquipamentosCopy.splice(position, 1)
+
+    console.log(itens)
+  }
+  
+  
+  
+  
+
+    
+
+
+  useEffect(() => {
     Equipments()
+
+
   }, [])
   
   
@@ -78,34 +139,42 @@ export default function ModalCreateReservaUser({email}:any) {
         }}
         >
           <h1>Nova Reserva </h1>
-          <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={"pt-br"}> 
+          <LocalizationProvider dateAdapter={AdapterDayjs} locale={"ptBR"}>
             <Stack spacing={2}>
               <DateTimePicker
                 label="Data & Hora Iniciala"
                 value={data_inicio}
-                onChange={(e: Date | null) => { set_data_inicio(e) }}
+                onChange={(e: Date | null) => { set_data_inicio(e)}}
                 renderInput={(params) => <TextField {...params} />}
-                inputFormat='DD-MM-YYYY HH:mm:ss'
+                inputFormat='DD/MM/YYYY - HH:mm'
                 ampm={false}
-                disableFuture = {true}
-                disablePast = {true}
-
+                InputProps={{sx: {"& .MuiSvgIcon-root": {color: "blue"}}}}
+                disableFuture = {false}
+                disablePast = {false}
+                maxDate={semanaPosterior}
+                minDate={semanaAnterior}
               />
+
               <DateTimePicker
                 label="Data & Hora Final"
                 value={data_fim}
                 onChange={(e: Date | null) => { set_data_fim(e) }}
                 renderInput={(params) => <TextField {...params} />}
-                inputFormat='DD-MM-YYYY HH:mm:ss'
+                inputFormat='DD/MM/YYYY - HH:mm'
                 ampm={false}
-                disableFuture = {true}
-                disablePast = {true}
+                InputProps={{sx: {"& .MuiSvgIcon-root": {color: "red"}}}}
+                disableFuture = {false}
+                disablePast = {false}
+                maxDate={semanaPosterior}
+                minDate={semanaAnterior}
+                
+
               />
               <Autocomplete
-                options={Equipamentos}
+                options={itens}
                 sx={{ width: '60vw' }}
-                freeSolo
-                onChange={((e: any, newValue: string | null) => { set_item_da_reserva(newValue) })}
+                freeSolo = {false}
+                onChange={((e: any, newValue: any) => { set_item_da_reserva(newValue) })}
                 renderInput={(e) =>
                   <TextField
                     {...e}
@@ -120,7 +189,8 @@ export default function ModalCreateReservaUser({email}:any) {
                   />
                 }
               />
-              <Button title='Cadastrar' onClick={() => NewReserva()} disabled = {!data_inicio || !data_fim || !item_da_reserva}> Cadastrar</Button>
+              <Button onClick={() => OptionsEquipamentos()}>Verificar equipamentos para data</Button>
+              <Button title='Cadastrar' onClick={() => NewReserva()} disabled = {!data_inicio || !data_fim || !item_da_reserva}> Cadastrar</Button> 
             </Stack>
           </LocalizationProvider>
         </Box>

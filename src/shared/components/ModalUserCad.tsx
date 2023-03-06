@@ -37,6 +37,10 @@ export default function ModalUserCad() {
           password: password
       }
       await CadUsers(data)
+      .then(res => {if(res.status == 201){
+        alert("Usuário Professor cadastrado com sucesso!")
+        handleClose()
+      }})
 
   }
   function EncryptedPassword(data: any){

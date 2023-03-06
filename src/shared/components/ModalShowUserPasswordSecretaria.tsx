@@ -54,11 +54,9 @@ export default function ModalShowUserPasswordSecretaria({id}: any) {
             setOpen(false)
         }
     }
-    console.log(id)
     useEffect(() => {
       Password_Admin();
     }, [])
-    console.log(passwordAdmin.map(e => e.password))
 
   return (
     <div>

@@ -27,6 +27,10 @@ export default function ModalEquipamentCad() {
       type: type,
     }
     await CadEquipamentos(data)
+    .then(res => {if(res.status == 201){
+      alert("Equipamento criado com sucesso!")
+      handleClose()
+    }})
   }
 
 
