@@ -1,9 +1,12 @@
-import { Button } from "@mui/material";
+import { Button, Stack, TextField } from "@mui/material";
+import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import moment from "moment";
 import React, { useState } from "react";
 import { Calendar } from "react-calendar"
 import 'react-calendar/dist/Calendar.css';
 import { GetDataReservadas } from "../../../shared/services/api";
+import { ToUtc } from "../../../shared/utils/ToUTC";
 
 
 
@@ -21,7 +24,11 @@ type RepositoryCalendarReserved = {
 export default function Data_de_Reserva(){
     const [dia, set_dia] = useState<Date | null>(null)
     const [Date_Reserved, set_Date_Reserved] = useState<RepositoryCalendarReserved[]>([])
-
+    const [data_inicio, set_data_inicio] = useState<Date|null>(null)
+    const semanaPosterior = new Date();
+    semanaPosterior.setDate(semanaPosterior.getDate() + 30)
+    const semanaAnterior = new Date();
+    semanaAnterior.setDate(semanaAnterior.getDate() - 30)
 
     async function GetDateReserved(Date_Search: string){
         await GetDataReservadas(Date_Search)
@@ -41,7 +48,7 @@ export default function Data_de_Reserva(){
     return(
         <>
             <div style={{display: 'flex', alignItems: 'center', justifyContent:'flex-start', flexDirection: "column", height:'100%', width: '100%'}}>
-                <Calendar 
+                {/* <Calendar 
                     // defaultActiveStartDate={startDate}
                     // activeStartDate = {startDate}
                     // goToRangeStartOnSelect
@@ -54,10 +61,27 @@ export default function Data_de_Reserva(){
                     // minDetail = "month"
                     calendarType ="ISO 8601"
                     onChange={(e: any) => {set_dia(e)} }
-                />
+                /> */}
+                <LocalizationProvider dateAdapter={AdapterDayjs} locale={"ptBR"}>
+                    <Stack spacing={2}>
+                        <DateTimePicker
+                            label="Data & Hora da busca"
+                            value={data_inicio}
+                            onChange={(e: Date | null) => { set_data_inicio(e)}}
+                            renderInput={(params) => <TextField {...params} />}
+                            inputFormat='DD/MM/YYYY - HH:mm'
+                            ampm={false}
+                            InputProps={{sx: {"& .MuiSvgIcon-root": {color: "blue"}}}}
+                            disableFuture = {false}
+                            disablePast = {false}
+                            maxDate={semanaPosterior}
+                            minDate={semanaAnterior}
+                        />
+                    </Stack>
+                </LocalizationProvider>
 
                 <Button
-                onClick={() => GetDateReserved(moment(dia).format())}
+                onClick={() => GetDateReserved(ToUtc(data_inicio))}
                 >
                     Buscar
                 </Button>
