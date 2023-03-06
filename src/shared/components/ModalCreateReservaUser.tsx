@@ -79,24 +79,25 @@ export default function ModalCreateReservaUser({name, email}:any) {
 
   function OptionsEquipamentos(){
     EquipamentsReserved(ToUtc(data_inicio))
-    OptionsEquipamentos()
     if(equipamentReserved.length == 0){
       console.log("não ha equipamentos reservados")
       set_itens(Equipamentos)
     }
-    for (var i = 0 ; i < equipamentReserved.length; i++) {
-      for(var j = 0; j < Equipamentos.length; j++) {
-        if(equipamentReserved[i].item_da_reserva == Equipamentos[j]){
-          SpliceEquipamentos(j)
-          set_itens(EquipamentosCopy)
+    else{
+      for (var i = equipamentReserved.length -1 ; i >=0 ; i--) {
+        for(var j = 0; j < Equipamentos.length; j++) {
+          if(equipamentReserved[i].item_da_reserva == Equipamentos[j]){
+            SpliceEquipamentos(j)
+            set_itens(EquipamentosCopy)
+          }
         }
       }
     }
   }
+  console.log(equipamentReserved.length)
   function SpliceEquipamentos(position: number){
     EquipamentosCopy.splice(position, 1)
 
-    console.log(itens)
   }
   
   
@@ -111,7 +112,9 @@ export default function ModalCreateReservaUser({name, email}:any) {
 
 
   }, [])
-  
+  useEffect(() => {
+    OptionsEquipamentos()
+  },[data_inicio])
   
   return (
     <div>
