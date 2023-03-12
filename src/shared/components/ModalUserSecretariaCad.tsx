@@ -52,7 +52,7 @@ export default function ModalUserSecretariaCad() {
 
   return (
     <div>
-      <Button color={"warning"} style={{margin:'1em'}} variant='contained' onClick={handleOpen}>< PlusCircle size={24} style={{marginRight:'1em'}} /> Cadastrar Usuário Secretaria </Button>
+      <Button color={"warning"} style={{margin:'1em'}} variant='contained' onClick={handleOpen}>< PlusCircle size={24} style={{marginRight:'1em'}} /> Novo(a) Secretario(a) </Button>
       <Modal
         open={open}
         onClose={handleClose}

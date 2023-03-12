@@ -52,7 +52,7 @@ export default function ModalUserCad() {
 
   return (
     <div>
-      <Button color={"warning"} style={{margin:'1em'}} variant='contained' onClick={handleOpen}>< PlusCircle size={24} style={{marginRight:'1em'}} />Cadastrar Usuário Professor</Button>
+      <Button color={"warning"} style={{margin:'1em'}} variant='contained' onClick={handleOpen}>< PlusCircle size={24} style={{marginRight:'1em'}} />Novo Professor(a)</Button>
       <Modal
         open={open}
         onClose={handleClose}

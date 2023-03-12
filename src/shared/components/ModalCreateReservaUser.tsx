@@ -118,8 +118,8 @@ export default function ModalCreateReservaUser({name, email}:any) {
   
   return (
     <div>
-      <Button variant='contained' color='warning' style={{ marginTop: '1em' }} onClick={handleOpen}><
-        PlusCircle size={24} style={{ marginRight: '0.3em' }} />
+      <Button variant='contained' color='warning' style={{ margin: '1em' }} onClick={handleOpen}>
+        <PlusCircle size={24} style={{ marginRight: '0.3em' }} />
         Nova Reserva
       </Button>
       <Modal
@@ -141,7 +141,7 @@ export default function ModalCreateReservaUser({name, email}:any) {
           background: 'white'
         }}
         >
-          <h1>Nova Reserva </h1>
+          <h1 className=''>Nova Reserva </h1>
           <LocalizationProvider dateAdapter={AdapterDayjs} locale={"ptBR"}>
             <Stack spacing={2}>
               <DateTimePicker

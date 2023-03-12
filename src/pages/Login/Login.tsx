@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react'
-import "./style.css"
 
 import {User, Key, IdentificationCard, Target} from "phosphor-react"
-import { Button } from '@mui/material'
+import { Avatar, Box, Button, Checkbox, createTheme, CssBaseline, FormControlLabel, Grid, Paper, TextField, ThemeProvider, Typography } from '@mui/material'
 import { login } from '../../shared/utils/Auth'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { GetPasswordAdmin, GetUsers, GetUserSecretaria } from '../../shared/services/api'
 import EncryptedPassword from '../../shared/components/EncryptPassword'
 import sleep from '../../shared/components/Sleep'
@@ -20,16 +19,28 @@ type RepositoryAdmin = {
   password: string
 }
 type RepositoryUsersSecretaria = {
+  id: string
   email: string
   password: string
 }
 
+function Copyright(props: any) {
+  return (
+    <Typography variant="body2" color="text.secondary" align="center" {...props}>
+      {'Copyright © '}
+      <Link style={{color: "blue", textDecoration:'none'}} to={"#"}>
+        SisReserva
+      </Link>{' '}
+      {new Date().getFullYear()}
+      {'.'}
+    </Typography>
+  );
+}
+const theme = createTheme();
+
 function Login() {
   
   const navigation = useNavigate();
-  
-
-
   const [email, set_email] = useState<string>("")
   const [password, set_password] = useState<string>("")
   
@@ -46,7 +57,7 @@ function Login() {
       for(let i = 0; i < secretaria.length; i++){
         if(email === secretaria[i].email && password === secretaria[i].password){
           login("abc123")
-          navigation('/secretaria') 
+          navigation(`/secretaria/${secretaria[i].id}`) 
         }   
       } 
       for(var i = 0; i < users.length; i++){
@@ -96,50 +107,81 @@ useEffect(() => {
   Users();
 }, [])
 
+
   return (
-    <div className="content">
-      <div className='card'>
-        <h1>Login Reserva</h1>
-        <form action="">
-          <div className='card-iten'>
-            <User color='white' size={24} />
-            <input 
-              type="email" 
-              name="email" 
-              id="email" 
-              placeholder='e-mail'
-              onChange={e => set_email(e.target.value)}
-            />
-          </div>
-
-          {/* <div className='card-iten'>
-            <IdentificationCard color='white' size={24} />
-            <input type="text" name="nome" id="nome" placeholder='nome'/>
-          </div> */}
-
-          <div className='card-iten'>
-            <Key color='white' size={24} />
-            <input 
-              type="password" 
-              name="senha" 
-              id="senha" 
-              placeholder='senha'
-              onChange={e => set_password(EncryptedPassword(e.target.value))}
-            />
-          </div>
-          <Button 
-            variant="contained" 
-            color={"info"} 
-            style={{ margin: '1em 0px' }} 
-            onClick={() => {handleLogin(email, password)}}
-            disabled={!email || !password}
+    <>
+    <ThemeProvider theme={theme}>
+      <Grid container component="main" sx={{ height: '100vh' }}>
+        <CssBaseline />
+        <Grid
+          item
+          xs={false}
+          sm={4}
+          md={7}
+          sx={{
+            backgroundImage: 'url(https://www.sistemadereserva.com/core/painel/app-assets/images/pages/login-v2.svg)',
+            backgroundRepeat: 'no-repeat',
+            backgroundColor: (t) =>
+              t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
+            backgroundSize: 'auto',
+            backgroundPosition: 'center',
+          }}
+        />
+        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+          <Box
+            sx={{
+              my: 8,
+              mx: 4,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
           >
-            Entrar
-          </Button>
-
-        </form>
-      </div>
-    </div>
+            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+              {/* <LockOutlinedIcon /> */}
+            </Avatar>
+            <Typography component="h1" variant="h5">
+              SisReserva - Bem Vindo!
+            </Typography>
+            <Box component="form" noValidate sx={{ mt: 1 }}>
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="email"
+                label="E-mail"
+                name="email"
+                autoComplete="email"
+                autoFocus
+                onChange={e => set_email(e.target.value)}
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                name="password"
+                label="Senha"
+                type="password"
+                id="password"
+                autoComplete="current-password"
+                onChange={e => set_password(EncryptedPassword(e.target.value))}
+              />
+              <Button
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+                onClick={() => {handleLogin(email, password)}}
+                disabled={!email || !password}
+              >
+                Entrar
+              </Button>
+            </Box>
+          </Box>
+              <Copyright sx={{ mt: '40%' }} />
+        </Grid>
+      </Grid>
+    </ThemeProvider>
+    </>
   )
 }
 

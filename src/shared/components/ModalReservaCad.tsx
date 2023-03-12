@@ -94,7 +94,6 @@ export default function ModalReservaCad() {
   return (
     <div>
         <Button 
-            style={{margin:'1em'}} 
             variant='contained' 
             onClick={handleOpen}
             color={"warning"}

@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
-import { TextField } from '@mui/material';
+import { Alert, TextField } from '@mui/material';
 import { CadEquipamentos } from '../services/api';
 import { Eye, PlusCircle } from 'phosphor-react';
 
@@ -27,10 +27,16 @@ export default function ModalEquipamentCad() {
       type: type,
     }
     await CadEquipamentos(data)
-    .then(res => {if(res.status == 201){
-      alert("Equipamento criado com sucesso!")
+    .then(res => {
+      if(res.status == 201){
+        alert("Equipamento criado com sucesso!")
+        handleClose()
+      }
+    })
+    .catch(err => {
+      alert("Erro!\nO nome do equipamento já está em uso")
       handleClose()
-    }})
+    })
   }
 
 

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import "../components/admin.css"
 import { DelReserva,GetReserva } from "../services/api";
-import { Button } from "@mui/material";
+import { Box, Button, useMediaQuery } from "@mui/material";
 import { MinusCircle } from "phosphor-react";
 import ModalReservaCad from "./ModalReservaCad";
 import { HmacSHA224 } from "crypto-js";
@@ -17,6 +16,7 @@ type RepositoryEquipamentos = {
 
 export default function Reserva_Menu({disabled = false}){
     const [reserva, set_reserva] = useState<RepositoryEquipamentos[]>([])
+    const matches = useMediaQuery((theme: any) => theme.breakpoints.up('md'))
     async function Reservas(){
         await GetReserva()
             .then(res => {
@@ -35,18 +35,33 @@ export default function Reserva_Menu({disabled = false}){
   
 
     return(
-        <div className="content-admin">
-            <ModalReservaCad />
-            <ul style={{marginTop: '1em'}}>
+        <Box bgcolor="transparent"  width={'100%'} flexDirection={"column"} display={"flex"}>
+            <Box bgcolor={'transparent'} display={"flex"} alignItems="center" justifyContent={"center"}>
+                <ModalReservaCad />
+            </Box>
+            <Box display={!matches ? "grid" : "grid" } gridTemplateColumns={!matches ?"auto": "auto auto"}>
                 {
                     reserva.map(e => 
-                            <li>
+                        <Box
+                            key={e.id}
+                            textAlign={"center"} 
+                            bgcolor={"blanchedalmond"}
+                            // #0288d1 
+                            margin={'1em'}
+                            borderRadius={'1em'} 
+                            boxShadow={"2px 2px 5px black"}
+                            color = {"black"}
+                            width={!matches? "95%": "95%"}
+
+
+                        >
                                 <h2>Item da reserva: {e.item_da_reserva}</h2>
                                 <h3>reservado por: {e.nameUser}</h3>
                                 <p>Protocolo: {e.id}</p>
                                 <>data inicio:{e.data_inicio}</>
                                 <br />
                                 <>data fim: {e.data_fim}</>
+                                <br />
                                 <Button 
                                     variant="contained" 
                                     color="error" 
@@ -59,10 +74,10 @@ export default function Reserva_Menu({disabled = false}){
                                     />
                                     Excluir Reserva
                                 </Button>
-                            </li>
+                            </Box>
                         )
                 }
-            </ul>
-        </div>
+            </Box>
+        </Box>
     );
 }
